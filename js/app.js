@@ -457,10 +457,12 @@ var app = function () {
      *
      * */
     var showTip = function (properties) {
-        var e = properties.event;
-        e.stopPropagation();
-        // 获取拖动选项
-        var item = items.get(properties.item);
+        var event = properties.event;
+        var pro = timeline.getEventProperties(event);
+        var id = pro.item;
+        // 选项集合数据
+        var itemsDatas = timeline.itemsData._data;
+        var item = itemsDatas[id];
         // 绑定popover
         bindPopover(item);
     };
