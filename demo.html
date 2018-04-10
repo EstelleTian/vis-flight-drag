@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>DEMO-vis.js</title>
+  <link href="plugins/vis/css/vis-timeline-graph2d.min.css" rel="stylesheet" type="text/css" />
+  <link href="css/vis-timeline-custom.min.css" rel="stylesheet" type="text/css" />
+  <link href="plugins/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+</head>
+<body>
+<div id="visualization"></div>
+
+<script src="plugins/vis/js/vis.js"></script>
+<script src="plugins/jquery/jquery.min.js"></script>
+<script src="plugins/jquery/jquery-custom-util.js"></script>
+<script src="plugins/bootstrap/dist/js/bootstrap.js"></script>
+<script src="plugins/handlebars/handlebars-v4.0.11.js"></script>
+<script id="ctot-collaborate" type="text/x-handlebars-template">
+    <div class="panel panel-info ctot-collaborate-container">
+      <div class="panel-heading">
+        <h3 class="panel-title">{{this.flightId}}变更</h3>
+        <a class="glyphicon glyphicon-ok modal-btn modal-ok-btn" title="提交"></a>
+        <a class="glyphicon glyphicon-repeat modal-btn modal-revert-btn" title="还原"></a>
+      </div>
+      <div class="panel-body">
+        <p class="original-value">
+          <span>{{this.ctot}}</span>
+          <span class="runway">{{this.runway}}</span>
+        </p>
+        <p class="new-value">
+          <span>{{this.start}}</span>
+          <span class="runway">{{this.group}}</span>
+        </p>
+      </div>
+    </div>
+
+</script>
+<script src="js/app.js"></script>
+</body>
+</html>

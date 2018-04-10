@@ -1,0 +1,105 @@
+.vis-timeline {
+    border: 1px solid #4d4d4d;
+    /*font-family:  purisa, 'comic sans', cursive;*/
+    /*font-size: 12pt;*/
+    background: #f8f5ed;
+}
+
+.vis-item {
+    /*border-color: #7b7876;*/
+    /*background-color: #f60;*/
+    font-size: 12pt;
+    /*color: #FFFFFF;*/
+    /*box-shadow: 5px 5px 20px rgba(128,128,128, 0.5);*/
+}
+
+.vis-item,
+.vis-item.vis-line {
+    border-width: 2px;
+}
+
+.vis-item.vis-dot {
+    border-width: 4px;
+    border-radius: 4px;
+}
+
+.vis-item.vis-selected {
+    border-color: green;
+    background-color: lightgreen;
+}
+
+.vis-item.vis-moved {
+    /*border-color: green;*/
+    /*background-color: #90ee90;*/
+}
+
+.vis-time-axis .vis-text.vis-major {
+    font-weight: bold;
+}
+
+.vis-time-axis .vis-grid.vis-minor {
+    /*border: 1px dotted #dddddd;*/
+    /*border: 1px solid #eae6e6;*/
+}
+
+.vis-time-axis .vis-grid.vis-major {
+    border-width: 2px;
+    border-color: #F991A3;
+}
+.vis-detail {
+    background: linear-gradient(to right, rgb(229, 229, 229), rgb(229, 229, 229) 1px, transparent 1px, transparent) 0% 0% / 20% 100%;
+}
+.vis-time-axis .vis-grid.vis-vertical {
+    border-left: 0px;
+
+}
+.vis-bottom .vis-time-axis .vis-text {
+    border-left: 1px solid #a7a4a4;
+    color: #eae6e6;
+    padding-top: 10px;
+    padding-left: 10px;
+    background: #726d62;
+    /*background-image: linear-gradient(90deg, rgb(248, 245, 237) 5px, rgb(114, 109, 98) 1px);*/
+    /*background-size: 20% 100%;*/
+}
+.vis-box {
+    /*background: 0 0;*/
+    background: #f7f7f7;
+    border-color: transparent;
+    /*border-color: #ebebeb;*/
+    box-shadow: 5px 5px 20px rgba(128,128,128, 0.5);
+}
+
+.vis-box .ctot-collaborate-container {
+    /*width: 180px;*/
+    margin: 0;
+}
+.vis-box .modal-btn {
+    float: right;
+    top: -15px;
+    margin-left: 8px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.vis-box .modal-ok-btn {
+    color: #419c43;
+}
+.vis-box .modal-revert-btn {
+    color: #f1a264;
+}
+.vis-box .panel-info>.panel-heading {
+    padding: 4px;
+    text-align: left;
+}
+.vis-box .panel-body {
+    text-align: left;
+    padding: 10px 5px;
+}
+.vis-box .panel-body > p {
+    margin: 8px 0;
+}
+
+.vis-box .panel-body .runway {
+    margin-left: 15px;
+}
