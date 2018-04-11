@@ -12,7 +12,9 @@
     /*color: #FFFFFF;*/
     /*box-shadow: 5px 5px 20px rgba(128,128,128, 0.5);*/
 }
-
+.vis-current-time {
+    background-color: #90ee90;
+}
 .vis-item,
 .vis-item.vis-line {
     border-width: 2px;
@@ -25,12 +27,22 @@
 
 .vis-item.vis-selected {
     border-color: green;
-    background-color: lightgreen;
+    /*background-color: lightgreen;*/
+    background-color: #f7f7f7;
 }
+.vis-editable.vis-selected,.vis-item .vis-drag-center  {
+    cursor: auto;
+}
+/*.vis-item.vis-selected.vis-moved {*/
+    /*border-color: #ff7f6e;*/
+/*}*/
 
 .vis-item.vis-moved {
     /*border-color: green;*/
     /*background-color: #90ee90;*/
+}
+.vis-dot.vis-moved, .vis-line.vis-moved{
+    border-color: #ff7f6e;
 }
 
 .vis-time-axis .vis-text.vis-major {

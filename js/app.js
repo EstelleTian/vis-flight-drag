@@ -12,7 +12,7 @@ var app = function () {
      * 模拟数据
      * */
     //  分组(跑道)
-    var groupName = ['02L/20R','02R/20L'];
+    var groupName = ['20R','02R'];
     // 分组格式化
     var groups = new vis.DataSet();
     for(var i = 0; i < groupName.length; i++){
@@ -20,61 +20,7 @@ var app = function () {
     }
 
     var nowDate = $.getFullTime(new Date()).substring(0,8);
-
-    // 航班数据
-    var flight = [
-        {
-            id: 115502069,
-            flightId: 'CCA4520',
-            ctd: nowDate + '1040',
-        },
-        {
-            id: 115502111,
-            flightId: 'CES5282',
-            ctd: nowDate + '1337',
-        },{
-            id: 115502113,
-            flightId: 'CQH8985',
-            ctd: nowDate + '0705',
-        },{
-            id: 115502114,
-            flightId: 'CES5405',
-            ctd: nowDate + '0920',
-        },{
-            id: 115502125,
-            flightId: 'CSC8661',
-            ctd: nowDate + '1321',
-        },{
-            id: 115530020,
-            flightId: 'CSN6926',
-            ctd: nowDate + '1349',
-        },{
-            id: 115516481,
-            flightId: 'CSC8173',
-            ctd: nowDate + '1420',
-        },{
-            id: 115524045,
-            flightId: 'CSC8841',
-            ctd: nowDate + '1148',
-        },{
-            id: 115515019,
-            flightId: 'CHH7096',
-            ctd: nowDate + '1523',
-        }
-    ];
-    // 转换航班数据数据
     var data = [];
-    flight.map(function (item,index) {
-        var obj = {};
-        obj.id = item.id;
-        obj.flightId = item.flightId;
-        obj.content = item.flightId + ' ' + item.ctd;
-        obj.start = $.parseFullTime(item.ctd);
-        obj.ctot = item.ctd;
-        obj.group = Math.floor(Math.random() * groupName.length);
-        obj.runway = obj.group;
-        data.push(obj);
-    });
     // 拖动选项对象集合
     var items = null;
     // 可拖动范围临界 (当前日期的0000~2359)
@@ -86,6 +32,16 @@ var app = function () {
 
     //被移动标识
     var beMoved = false;
+    // 被移动项的start时间
+    var movedItemStart = null;
+
+    var editableOpt ={
+        add: false,         // add new items by double tapping
+        updateTime: true,  // drag items horizontally
+        updateGroup: true, // drag items from one group to another
+        remove: false,       // delete an item by tapping the delete button top right
+        overrideItems: false  // allow these options to override item.editable
+    }
 
 
     // Configuration for the Timeline
@@ -121,14 +77,14 @@ var app = function () {
         width: '100%',
         // type : 'point',
         dataAttributes : ['id'],
-        selectable: false,
-        editable: {
-            add: false,         // add new items by double tapping
-            updateTime: true,  // drag items horizontally
-            updateGroup: true, // drag items from one group to another
-            remove: false,       // delete an item by tapping the delete button top right
-            overrideItems: false  // allow these options to override item.editable
+        // selectable: false,
+        editable: editableOpt,
+        // 设置移动选项时总是以1分钟步长移动,与缩放级别无关
+        snap: function (date, scale, step) {
+            var minute  = 1000 * 60 ;
+            return Math.round(date / minute ) * minute;
         },
+
         min:$.parseFullTime( minRange),                // lower limit of visible range
         max: $.parseFullTime(maxRange),                // upper limit of visible range
         zoomMin: 1000 * 60 * 60 * 0.5,
@@ -156,11 +112,19 @@ var app = function () {
                 item.start = $.parseFullTime(start);
             }
 
-            // 更新选项内容
-            if(!beMoved){
-                item.content = item.flightId + ' ' + $.getFullTime(item.start);
-            }else {
-                // todo
+            // // 更新选项内容
+            // if(!beMoved){
+            //     item.content = item.flightId + ' ' + $.getFullTime(item.start);
+            // }else {
+            //     // todo
+            // }
+            // 若被移动(位置及分组发生变更)
+            if(item.ctot !== $.getFullTime(item.start) || item.runwayGroup !== item.group){
+                // 显示协调窗口
+                showCollaborate(item);
+            }else { // 未被移动
+                // 重置数据
+                resetItemData(item);
             }
 
             // 回调函数
@@ -168,7 +132,7 @@ var app = function () {
         },
         onMove : function (item, callback) {
             // 若被移动(位置及分组发生变更)
-            if(item.ctot !== $.getFullTime(item.start) || item.runway !== item.group){
+            if(item.ctot !== $.getFullTime(item.start) || item.runwayGroup !== item.group){
                 // 设置移动项
                 setMovedItem(item);
             }else { // 未被移动
@@ -196,6 +160,7 @@ var app = function () {
         if(beMoved){
             // 只显示协调窗口
             showCollaborate(item);
+            movedItemStart = item.start;
             return;
         }
         // 若未被移动,则禁用其他选项编辑
@@ -220,6 +185,7 @@ var app = function () {
         // 更新时间轴选项集合数据
         timeline.setItems(arr);
         beMoved = true;
+        movedItemStart = item.start;
     };
 
 
@@ -241,7 +207,7 @@ var app = function () {
             for (var i in itemsDatas) {
                 // 将当前选项以外的选项设置为可编辑
                 if (itemsDatas[i].id !== item.id) {
-                    itemsDatas[i].editable = true;
+                    itemsDatas[i].editable = editableOpt;
                 } else {
                     // 重置数据
                     resetItemData(item);
@@ -256,7 +222,7 @@ var app = function () {
             timeline.setItems(arr);
         }
         beMoved = false;
-        
+        movedItemStart = null;
     }
 
 
@@ -268,27 +234,27 @@ var app = function () {
         var data = {};
         data.flightId = item.flightId;
         data.ctot = item.ctot;
-        data.start = $.getFullTime(item.start);
-        data.runway = groupName[item.runway];
-        data.group = groupName[item.group];
+        data.newCtot = $.getFullTime(item.start);
+        data.runway = item.runway;
+        data.newRunway = groupName[item.group];
         var node = createcollaborateDom (data);
         item.content = node;
     };
 
     // 重置数据
     var resetItemData = function (item) {
-        item.editable = true;
+        item.editable = editableOpt;
         // 移除特殊class名称
         item.className = '';
         // 重置为原始值
         item.start = $.parseFullTime(item.ctot);
-        item.group = item.runway;
-        item.content = item.flightId + ' ' + item.ctot;
+        item.group = item.runwayGroup;
+        item.content = setContent(item);
     }
 
     // 更新数据
     var updateItemData = function (item) {
-        item.editable = true;
+        item.editable = editableOpt;
         // 移除特殊class名称
         item.className = '';
         // 重置为原始值
@@ -307,10 +273,19 @@ var app = function () {
 
     // 移动窗口，使指定选项在窗口水平居中显示
     var moveToItem = function (item) {
-        // 获取时间
-        var start = $.parseFullTime(item.ctot);
-        // 使给定时间的选项在屏幕上水平居中显示
-        timeline.moveTo(start);
+        if($.isValidObject(timeline) && $.isValidObject(item)){
+            // 获取时间
+            var start = $.parseFullTime(item.ctot);
+            // 使给定时间的选项在屏幕上水平居中显示
+            timeline.moveTo(start);
+        }
+
+    }
+    // 选中指定项
+    var setSelectedItem = function (item) {
+        if($.isValidObject(timeline) && $.isValidObject(item)){
+            timeline.setSelection(item.id);
+        }
     }
 
 
@@ -382,7 +357,21 @@ var app = function () {
         $(container).on('click','.modal-revert-btn',function (event) {
             event.stopPropagation();
             revertItem(event);
+        });
+        //移动至当前时间
+        $('#to-current').on('click',function () {
+            if($.isValidObject(timeline)){
+                timeline.moveTo(new Date());
+            }
         })
+        // 移动至被移动航班
+
+        $('#to-moved').on('click',function () {
+            if($.isValidObject(timeline) && movedItemStart){
+                timeline.moveTo(movedItemStart);
+            }
+        })
+
 
 
     };
@@ -402,7 +391,7 @@ var app = function () {
         for (var i in itemsDatas) {
             // 将当前选项以外的选项设置为可编辑
             if (itemsDatas[i].id !== item.id) {
-                itemsDatas[i].editable = true;
+                itemsDatas[i].editable = editableOpt;
             } else {
                 resetItemData(item);
                 // 更新当前选项数据
@@ -415,7 +404,9 @@ var app = function () {
         // 更新时间轴选项集合数据
         timeline.setItems(arr);
         moveToItem(item);
+        setSelectedItem(item);
         beMoved = false;
+        movedItemStart = null;
         // 注销
         destroyPopover()
     };
@@ -434,7 +425,7 @@ var app = function () {
         for (var i in itemsDatas) {
             // 将当前选项以外的选项设置为可编辑
             if (itemsDatas[i].id !== item.id) {
-                itemsDatas[i].editable = true;
+                itemsDatas[i].editable = editableOpt;
             } else {
                 updateItemData(item);
                 // 更新当前选项数据
@@ -446,7 +437,9 @@ var app = function () {
         // 更新时间轴选项集合数据
         timeline.setItems(arr);
         moveToItem(item);
+        setSelectedItem(item);
         beMoved = false;
+        movedItemStart = null;
         // 注销
         destroyPopover()
     };
@@ -467,8 +460,39 @@ var app = function () {
         bindPopover(item);
     };
 
+
+    var setGroup = function (runway) {
+
+        for(var i = 0; i< groupName.length; i++){
+            if(groupName[i] == runway){
+                return i;
+            }
+        }
+    };
+
+    var setContent= function (item) {
+        var str = '';
+        var time = item.ctot.substring(6,8) + '/' + item.ctot.substring(10,12);
+        str = item.flightId +' ' + time + ' ' + item.airport +' ' +  item.runway;
+        return str;
+
+    };
+    var initData = function () {
+
+        flightDatas.map(function (item,index) {
+            var obj = $.extend({},item);
+            obj.content = setContent(item);;
+            obj.start = $.parseFullTime(item.ctot);
+            obj.newCtot = obj.ctot; //
+            obj.group = setGroup(item.runway);
+            obj.runwayGroup = obj.group; //
+            data.push(obj);
+        });
+    }
+
     return {
         init : function () {
+            initData();
             initTimeLine();
             initEvent();
         }

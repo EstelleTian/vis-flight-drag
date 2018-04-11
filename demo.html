@@ -10,6 +10,8 @@
 </head>
 <body>
 <div id="visualization"></div>
+<button id="to-current">当前时间</button>
+<button id="to-moved">被移动航班</button>
 
 <script src="plugins/vis/js/vis.js"></script>
 <script src="plugins/jquery/jquery.min.js"></script>
@@ -25,17 +27,20 @@
       </div>
       <div class="panel-body">
         <p class="original-value">
+          <span>原始值:</span>
           <span>{{this.ctot}}</span>
           <span class="runway">{{this.runway}}</span>
         </p>
         <p class="new-value">
-          <span>{{this.start}}</span>
-          <span class="runway">{{this.group}}</span>
+          <span>修改值:</span>
+          <span>{{this.newCtot}}</span>
+          <span class="runway">{{this.newRunway}}</span>
         </p>
       </div>
     </div>
 
 </script>
+<script src="js/data.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>
