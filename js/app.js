@@ -479,10 +479,11 @@ var app = function () {
     };
     var initData = function () {
 
+
         flightDatas.map(function (item,index) {
             var obj = $.extend({},item);
             obj.content = setContent(item);;
-            obj.start = $.parseFullTime(item.ctot);
+            obj.start = $.parseFullTime(nowDate + item.ctot.substring(8,12));
             obj.newCtot = obj.ctot; //
             obj.group = setGroup(item.runway);
             obj.runwayGroup = obj.group; //
