@@ -9,9 +9,18 @@
 
 </head>
 <body>
-<div id="visualization"></div>
-<button id="to-current">当前时间</button>
-<button id="to-moved">被移动航班</button>
+<div id="timeline-contents">
+  <div id="visualization"></div>
+  <div class="move-btn">
+    <a class="glyphicon glyphicon-time mto-btn" id="to-current" title="移至当前时间"></a>
+    <a class="glyphicon glyphicon-plane mto-btn" id="to-moved" title="移至被移动航班"></a>
+
+  </div>
+
+</div>
+
+
+
 
 <script src="plugins/vis/js/vis.js"></script>
 <script src="plugins/jquery/jquery.min.js"></script>

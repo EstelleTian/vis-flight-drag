@@ -35,6 +35,8 @@ var app = function () {
     // 被移动项的start时间
     var movedItemStart = null;
 
+    var movedItemObj = null;
+
     var editableOpt ={
         add: false,         // add new items by double tapping
         updateTime: true,  // drag items horizontally
@@ -149,6 +151,7 @@ var app = function () {
             // 只显示协调窗口
             showCollaborate(item);
             movedItemStart = item.start;
+            movedItemObj = $.extend({},item);
             return;
         }
         // 若未被移动,则禁用其他项目编辑
@@ -174,6 +177,7 @@ var app = function () {
         timeline.setItems(arr);
         beMoved = true;
         movedItemStart = item.start;
+        movedItemObj = $.extend({},item);
     };
 
 
@@ -213,6 +217,7 @@ var app = function () {
         setSelectedItem(item);
         beMoved = false;
         movedItemStart = null;
+        movedItemObj = null;
     }
 
 
@@ -322,7 +327,7 @@ var app = function () {
 
 
     var getContent = function (item) {
-        return '<p >跑道:'+ groupName[item.group]+'</p>'+ '<p >CTOT:'+ $.getFullTime(item.start) +'</p>'
+        return '<p >跑道:'+ groupName[item.group]+'</p>'+ '<p >降落机场:'+ item.airport+'</p>'+'<p >CTOT:'+ $.getFullTime(item.start) +'</p>'
     };
     /**
      * 注销 popover
@@ -367,6 +372,7 @@ var app = function () {
         $('#to-moved').on('click',function () {
             if($.isValidObject(timeline) && movedItemStart){
                 timeline.moveTo(movedItemStart);
+                setSelectedItem(movedItemObj);
             }
         })
 
@@ -405,6 +411,7 @@ var app = function () {
         setSelectedItem(item);
         beMoved = false;
         movedItemStart = null;
+        movedItemObj = null;
         // 注销
         destroyPopover()
     };
@@ -438,6 +445,7 @@ var app = function () {
         setSelectedItem(item);
         beMoved = false;
         movedItemStart = null;
+        movedItemObj = null;
         // 注销
         destroyPopover()
     };
@@ -470,7 +478,7 @@ var app = function () {
 
     var setContent= function (item) {
         var str = '';
-        var time = item.ctot.substring(6,8) + '/' + item.ctot.substring(10,12);
+        var time = item.ctot.substring(6,8) + '/' + item.ctot.substring(8,12);
         str = item.flightId +' ' + time + ' ' + item.airport +' ' +  item.runway;
         return str;
 
@@ -480,12 +488,12 @@ var app = function () {
 
         flightDatas.map(function (item,index) {
             var obj = $.extend({},item);
-            obj.content = setContent(item);;
             obj.start = $.parseFullTime(nowDate + item.ctot.substring(8,12));
             obj.ctot = nowDate + item.ctot.substring(8,12); //
             obj.newCtot = nowDate + item.ctot.substring(8,12); //
             obj.group = setGroup(item.runway);
             obj.runwayGroup = obj.group; //
+            obj.content = setContent(obj);
             data.push(obj);
         });
     }

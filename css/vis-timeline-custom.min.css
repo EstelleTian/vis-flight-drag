@@ -117,3 +117,47 @@
 .vis-box .panel-body .runway {
     margin-left: 15px;
 }
+
+#timeline-contents {
+    position: relative;
+}
+
+.move-btn {
+    position: absolute;
+    top:10px;
+    right: 15px;
+    z-index: 99;
+    border-color: transparent;
+    box-shadow: 5px 5px 20px rgba(128,128,128, 0.5);
+    padding: 0px 5px;
+}
+
+.move-btn .mto-btn {
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 24px;
+    padding: 10px 5px;
+    color: #00a0ff;
+    border-bottom: 1px solid #d0d0d0;
+}
+.move-btn .mto-btn:last-child {
+    border-bottom: 0px;
+}
+.mto-btn:hover,.mto-btn:focus, .mto-btn:active {
+    text-decoration: none;
+    color: #00a0ff;
+}
+
+
+.vis-vertical-scroll::-webkit-scrollbar {
+    width: 7px
+}
+.vis-vertical-scroll::-webkit-scrollbar-track {
+    background-color: #e5e5e5;
+    border-left: 2px solid transparent
+}
+.vis-vertical-scroll::-webkit-scrollbar-thumb {
+    background-color: #a6a6a6;
+    border-left: 2px solid transparent
+}
