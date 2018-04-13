@@ -22,11 +22,11 @@
 
 .vis-item.vis-dot {
     border-width: 4px;
-    border-radius: 4px;
+    border-radius: 4px;28
 }
 
 .vis-item.vis-selected {
-    border-color: green;
+    border-color: #ff7f6e;
     /*background-color: lightgreen;*/
     background-color: #f7f7f7;
 }
@@ -87,18 +87,20 @@
     margin: 0;
 }
 .vis-box .modal-btn {
-    float: right;
-    top: -15px;
-    margin-left: 8px;
+    position: absolute;
+    z-index: 2;
+    top: 10px;
     text-decoration: none;
     cursor: pointer;
 }
 
 .vis-box .modal-ok-btn {
     color: #419c43;
+    right: 15px;
 }
 .vis-box .modal-revert-btn {
     color: #f1a264;
+    right: 40px;
 }
 .vis-box .panel-info>.panel-heading {
     padding: 4px;
